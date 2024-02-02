@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+
+    <div id="search-container" class="search-bar">
+      <div class="buttondiv">
+        <input type="text" id="search-bar" placeholder="Search">
+        <input type="date" id="date-input">
+        <select id="function-selector">
+            <option value="fetchAndDisplayDate">Search by Date</option>
+            <option value="fetchAndDisplayId":>Search by Id</option>
+            <option value="fetchAndDisplayName":>Search by Name</option>
+        </select>
+    
+        <button id="search-button" onclick="performSearch()">Search</button>
+    </div>
+    </div>
+    <div class="buttondiv"> </div>
+
+    <div class="table">
+      <table border="1">
+        <thead class="table-head" id="tableHead">
+          <tr class="spacing">
+        
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+    
+        </tbody>
+      </table>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
