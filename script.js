@@ -16,6 +16,20 @@ const formatDateTime = (dateTimeString) => {
   }
 };
 
+const extractTime = (dateTimeString) => {
+  if (dateTimeString) {
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true,
+    };
+    return new Date(dateTimeString).toLocaleTimeString(undefined, options);
+  } else {
+    return 'no data';
+  }
+};
+
 
 function performSearch() {
   var selectedFunction = document.getElementById("function-selector").value;
@@ -126,10 +140,10 @@ async function fetchAndDisplay() {
       newRow.innerHTML = `
         <td style="background-color:white; width:200px; text-align:center">${row.student_id}</td>
         <td style="background-color:white; width:300px; text-align:center">${row.names.name}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_AM)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_NOON)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_PM)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_PM)}</td>
+        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_AM)}</td>
+        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_NOON)}</td>
+        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_PM)}</td>
+        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_PM)}</td>
       `;
       tableBody.appendChild(newRow);
     });
@@ -162,6 +176,8 @@ async function fetchAndDisplayDate() {
 
       const data = await response.json();
       console.log(data);
+
+      data.sort((a, b) => new Date(a.time_in_AM) - new Date(b.time_in_AM));
 
       const tableHead = document.getElementById('tableHead');
       tableHead.innerHTML = '';
@@ -203,10 +219,10 @@ async function fetchAndDisplayDate() {
           newRow.innerHTML = `
           <td style="background-color:white; width:200px; text-align:center">${row.student_id}</td>
           <td style="background-color:white; width:300px; text-align:center">${row.names.name}</td>
-          <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_AM)}</td>
-          <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_NOON)}</td>
-          <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_PM)}</td>
-          <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_PM)}</td>
+          <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_AM)}</td>
+          <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_NOON)}</td>
+          <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_PM)}</td>
+          <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_PM)}</td>
           `;
           tableBody.appendChild(newRow);
       });
@@ -214,60 +230,7 @@ async function fetchAndDisplayDate() {
       console.error('Error:', error.message);
   }
 }
-async function fetchAndDisplayId() {
-  const supabaseUrl = 'zpbgaevzeilxsxxdmyjx.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwYmdhZXZ6ZWlseHN4eGRteWp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE1ODMwMjMsImV4cCI6MjAxNzE1OTAyM30.IhZyJf9JWDZMC1AD0qLs5yv9D1QuINMVr-DeQooM0sM'; // Replace with your actual API key
 
-  try {
-    const studentId = document.getElementById('search-bar').value;
-
-    const response = await fetch(`https://${supabaseUrl}/rest/v1/attendance?select=*,names(*)&student_id=eq.${studentId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': supabaseKey,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error fetching data: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    console.log(data);
-
-    const tableHead = document.getElementById('tableHead');
-    tableHead.innerHTML = '';
-    const head = document.createElement('tr');
-    head.innerHTML = `
-      <th>ID No.</th>
-      <th>Intern Name</th>
-      <th>Time In AM</th>
-      <th>Time Out Noon</th>
-      <th>Time In Afternoon</th>
-      <th>Time Out Afternoon</th>
-    `;
-    tableHead.appendChild(head);
-
-    const tableBody = document.getElementById('tableBody');
-    tableBody.innerHTML = '';
-
-    data.forEach(row => {
-      const newRow = document.createElement('tr');
-      newRow.innerHTML = `
-        <td style="background-color:white; width:200px; text-align:center">${row.student_id}</td>
-        <td style="background-color:white; width:300px; text-align:center">${row.names.name}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_AM)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_NOON)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_PM)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_PM)}</td>
-      `;
-      tableBody.appendChild(newRow);
-    });
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
 
 async function fetchAndDisplayName() {
   const supabaseUrl = 'zpbgaevzeilxsxxdmyjx.supabase.co';
@@ -315,6 +278,64 @@ async function fetchAndDisplayName() {
       `;
       tableBody.appendChild(newRow);
     });
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+async function fetchAndDisplayId() {
+  const supabaseUrl = 'zpbgaevzeilxsxxdmyjx.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwYmdhZXZ6ZWlseHN4eGRteWp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE1ODMwMjMsImV4cCI6MjAxNzE1OTAyM30.IhZyJf9JWDZMC1AD0qLs5yv9D1QuINMVr-DeQooM0sM'; // Replace with your actual API key
+
+  try {
+    const studentId = document.getElementById('search-bar').value;
+
+    const response = await fetch(`https://${supabaseUrl}/rest/v1/attendance?select=*,names(*)&student_id=eq.${studentId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': supabaseKey,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    data.sort((a, b) => new Date(a.time_in_AM) - new Date(b.time_in_AM));
+
+    const tableHead = document.getElementById('tableHead');
+    tableHead.innerHTML = '';
+    const head = document.createElement('tr');
+    head.innerHTML = `
+      <th>ID No.</th>
+      <th>Intern Name</th>
+      <th>Time In AM</th>
+      <th>Time Out Noon</th>
+      <th>Time In Afternoon</th>
+      <th>Time Out Afternoon</th>
+    `;
+    tableHead.appendChild(head);
+
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+
+    data.forEach(row => {
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td style="background-color:white; width:200px; text-align:center">${row.student_id}</td>
+        <td style="background-color:white; width:300px; text-align:center">${row.names.name}</td>
+        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_AM)}</td>
+        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_NOON)}</td>
+        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_in_PM)}</td>
+        <td style="background-color:white; width:400px; text-align:center">${formatDateTime(row.time_out_PM)}</td>
+        <h2 id="extractedHour"></h2>
+      `;
+      tableBody.appendChild(newRow);
+    });
+
   } catch (error) {
     console.error('Error:', error.message);
   }
