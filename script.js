@@ -125,7 +125,7 @@ async function fetchAndDisplay() {
     head.innerHTML = `
       <th>ID No.</th>
       <th>Intern Name</th>
-      <th>Time In AM-buntag</th>
+      <th>Time In AM</th>
       <th>Time Out Noon</th>
       <th>Time In Afternoon</th>
       <th>Time Out Afternoon</th>
