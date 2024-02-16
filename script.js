@@ -145,12 +145,13 @@ async function fetchAndDisplay() {
 
     data.forEach(row => {
       const newRow = document.createElement('tr');
+      newRow.classList.add('table-row'); 
       newRow.innerHTML = `
-        <td style="background-color:white; width:300px; text-align:center">${row.names.name}</td>
-        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_AM)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_NOON)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_PM)}</td>
-        <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_PM)}</td>
+        <td>${row.names.name}</td>
+        <td>${extractTime(row.time_in_AM)}</td>
+        <td>${extractTime(row.time_out_NOON)}</td>
+        <td>${extractTime(row.time_in_PM)}</td>
+        <td>${extractTime(row.time_out_PM)}</td>
       `;
       tableBody.appendChild(newRow);
     });
@@ -223,13 +224,14 @@ async function fetchAndDisplayDate() {
       const renderedHoursAM = calculateRenderedHours(row.time_in_AM, row.time_out_NOON);
       const renderedHoursPM = calculateRenderedHoursPM(row.time_in_PM, row.time_out_PM);
       const totalRenderedHours = sumRenderedHours(renderedHoursAM, renderedHoursPM);
+      newRow.classList.add('table-row'); 
       newRow.innerHTML = `
-              <td style="background-color:white; width:300px; text-align:center">${row.names.name}</td>
-              <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_AM)}</td>
-              <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_NOON)}</td>
-              <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_PM)}</td>
-              <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_PM)}</td>
-              <td style="background-color:white; width:400px; text-align:center">${totalRenderedHours}</td>
+              <td>${row.names.name}</td>
+              <td>${extractTime(row.time_in_AM)}</td>
+              <td>${extractTime(row.time_out_NOON)}</td>
+              <td>${extractTime(row.time_in_PM)}</td>
+              <td>${extractTime(row.time_out_PM)}</td>
+              <td>${totalRenderedHours}</td>
           `;
       tableBody.appendChild(newRow);
     });
@@ -384,13 +386,14 @@ async function fetchAndDisplayId() {
       const renderedHoursAM = calculateRenderedHours(row.time_in_AM, row.time_out_NOON);
       const renderedHoursPM = calculateRenderedHoursPM(row.time_in_PM, row.time_out_PM);
       const totalRenderedHours = sumRenderedHours(renderedHoursAM, renderedHoursPM);
+      newRow.classList.add('table-row'); 
       newRow.innerHTML = `
-      <td style="background-color:white; width:400px; text-align:center">${extractDate(row.date)}</td>
-      <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_AM)}</td>
-      <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_NOON)}</td>
-      <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_in_PM)}</td>
-      <td style="background-color:white; width:400px; text-align:center">${extractTime(row.time_out_PM)}</td>
-      <td style="background-color:white; width:400px; text-align:center">${totalRenderedHours}</td>
+      <td>${extractDate(row.date)}</td>
+      <td>${extractTime(row.time_in_AM)}</td>
+      <td>${extractTime(row.time_out_NOON)}</td>
+      <td>${extractTime(row.time_in_PM)}</td>
+      <td>${extractTime(row.time_out_PM)}</td>
+      <td>${totalRenderedHours}</td>
       `;
       tableBody.appendChild(newRow);
     });

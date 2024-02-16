@@ -54,3 +54,18 @@ button:focus{
     background-color:  #1E213F;
     color: white;
 }
+
+.table-row{
+    background-color:white;  
+    text-align:center;
+
+  }
+ 
+  .table-row td {
+    width: 400px;
+  }
+.table-row:hover {
+    background-color: rgb(213, 210, 210); /* Change the background color on hover */
+    cursor: pointer;
+  }
+
