@@ -242,51 +242,8 @@ function calculateRenderedHours(timestamp1, timestamp2) {
     return '0:00'; // If either timestamp is null, return 0 hours
   }
 
-  const timeDifference = calculateTimeDifference(timestamp1, timestamp2);
-  const [hours, minutes] = timeDifference.split(':').map(Number);
-
-  // Check if the difference is more than 4 hours
-  if (hours > 4) {
-    return '4:00'; // Return maximum rendered hours
-  }
-
-  return `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-}
-function calculateTimeDifference(timestamp1, timestamp2) {
-  const time1 = parseTimestamp(timestamp1);
-  let time2 = parseTimestamp(timestamp2);
-
-  // Check if timestamp2 is greater than 12:00:00
-  const twelvePM = new Date(2000, 0, 1, 12, 0, 0);
-  if (time2 > twelvePM) {
-    time2 = twelvePM;
-  }
-
-  // Calculate the difference in hours and minutes
-  let hours = time2.getHours() - time1.getHours();
-  let minutes = time2.getMinutes() - time1.getMinutes();
-
-  // Adjust for negative minutes
-  if (minutes < 0) {
-    hours--;
-    minutes += 60;
-  }
-
-  // Check if the difference is more than 4 hours
-  if (hours >= 4) {
-    hours = 4;
-    minutes = 0;
-  }
-
-  // Return the rendered hours and minutes as a string
-  return `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-}
-
-
-function parseTimestamp(timestamp) {
-  const [date, time] = timestamp.split('T');
-  const [hours, minutes, seconds] = time.split(':').map(Number);
-  return new Date(2000, 0, 1, hours, minutes, seconds);
+  const timeDifference = calculateTimeDifference(timestamp1, timestamp2, 8, 12);
+  return timeDifference;
 }
 
 function calculateRenderedHoursPM(timestamp3, timestamp4) {
@@ -294,46 +251,39 @@ function calculateRenderedHoursPM(timestamp3, timestamp4) {
     return '0:00'; // If either timestamp is null, return 0 hours
   }
 
-  const timeDifference = calculateTimeDifference(timestamp3, timestamp4);
-  const [hours, minutes] = timeDifference.split(':').map(Number);
-
-  // Check if the difference is more than 4 hours
-  if (hours > 4) {
-    return '4:00'; // Return maximum rendered hours
-  }
-
-  return `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+  const timeDifference = calculateTimeDifference(timestamp3, timestamp4, 13, 17);
+  return timeDifference;
 }
-function calculateTimeDifference(timestamp3, timestamp4) {
-  const time3 = parseTimestamp(timestamp3);
-  let time4 = parseTimestamp(timestamp4);
 
-  // Check if timestamp2 is greater than 12:00:00
-  const twelvePM = new Date(2000, 0, 1, 17, 0, 0);
-  if (time4 > twelvePM) {
-    time4= twelvePM;
+function calculateTimeDifference(timestamp1, timestamp2, startHour, endHour) {
+  let time1 = parseTimestamp(timestamp1);
+  let time2 = parseTimestamp(timestamp2);
+
+  let startOfDay = new Date(2000, 0, 1, startHour, 0, 0);
+  if (time1 < startOfDay) {
+    time1 = startOfDay;
   }
 
-  // Calculate the difference in hours and minutes
-  let hours = time4.getHours() - time3.getHours();
-  let minutes = time4.getMinutes() - time3.getMinutes();
+  let endOfDay = new Date(2000, 0, 1, endHour, 0, 0);
+  if (time2 >= endOfDay) {
+    time2 = endOfDay;
+  }
 
-  // Adjust for negative minutes
+  let hours = time2.getHours() - time1.getHours();
+  let minutes = time2.getMinutes() - time1.getMinutes();
+
   if (minutes < 0) {
     hours--;
     minutes += 60;
   }
 
-  // Check if the difference is more than 4 hours
-  if (hours >= 4) {
+  if (hours >= 4 || (hours === 4 && minutes > 0)) {
     hours = 4;
     minutes = 0;
   }
 
-  // Return the rendered hours and minutes as a string
   return `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 }
-
 
 function parseTimestamp(timestamp) {
   const [date, time] = timestamp.split('T');
