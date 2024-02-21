@@ -225,7 +225,6 @@ async function fetchAndDisplayDate() {
      
       const totalRenderedHoursTag = document.getElementById('totalRenderedHours');
      empty(totalRenderedHoursTag);
-  
       const studentname = document.getElementById('studentname');
   empty(studentname);
 
