@@ -219,6 +219,15 @@ async function fetchAndDisplayDate() {
           return 'no data';
         }
       };
+      function empty(element) {
+        element.innerHTML = ""; 
+     }
+     
+      const totalRenderedHoursTag = document.getElementById('totalRenderedHours');
+     empty(totalRenderedHoursTag);
+  
+      const studentname = document.getElementById('studentname');
+  empty(studentname);
 
       const newRow = document.createElement('tr');
       const renderedHoursAM = calculateRenderedHours(row.time_in_AM, row.time_out_NOON);
