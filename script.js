@@ -228,6 +228,7 @@ async function fetchAndDisplayDate() {
       const studentname = document.getElementById('studentname');
   empty(studentname);
 
+
       const newRow = document.createElement('tr');
       const renderedHoursAM = calculateRenderedHours(row.time_in_AM, row.time_out_NOON);
       const renderedHoursPM = calculateRenderedHoursPM(row.time_in_PM, row.time_out_PM);
@@ -366,6 +367,7 @@ async function fetchAndDisplayId() {
 
     const totalRenderedTime = `${finalHours}:${finalMinutes < 10 ? '0' : ''}${finalMinutes}`;
 
+    
     // Update the h3 tag with the total rendered hours
     const totalRenderedHoursTag = document.getElementById('totalRenderedHours');
     totalRenderedHoursTag.textContent = `Total Rendered Hours: ${totalRenderedTime}`;
@@ -406,6 +408,52 @@ async function fetchAndDisplayId() {
       tableBody.appendChild(newRow);
     });
 
+    const downloadButton = document.getElementById('downloadButton');
+    downloadButton.style.display = 'block';
+    downloadButton.addEventListener('click', downloadExcel);
+    
+  
+    function downloadExcel() {
+      const dataToExport = [['Date', 'Time In AM', 'Time Out AM', 'Time In PM', 'Time Out PM', 'Rendered Hours']];
+      data.forEach(row => {
+          const renderedHoursAM = calculateRenderedHours(row.time_in_AM, row.time_out_NOON);
+          const renderedHoursPM = calculateRenderedHoursPM(row.time_in_PM, row.time_out_PM);
+          const totalRenderedHours = sumRenderedHours(renderedHoursAM, renderedHoursPM);
+          dataToExport.push([
+              extractDate(row.date),
+              extractTime(row.time_in_AM),
+              extractTime(row.time_out_NOON),
+              extractTime(row.time_in_PM),
+              extractTime(row.time_out_PM),
+              totalRenderedHours
+          ]);
+      });
+  
+      // Calculate total rendered hours for the entire data
+      let totalRenderedHoursForAllData = 0;
+      data.forEach(row => {
+          const renderedHoursAM = calculateRenderedHours(row.time_in_AM, row.time_out_NOON);
+          const renderedHoursPM = calculateRenderedHoursPM(row.time_in_PM, row.time_out_PM);
+          const totalRenderedHours = sumRenderedHours(renderedHoursAM, renderedHoursPM);
+          const [hours, minutes] = totalRenderedHours.split(':').map(Number);
+          totalRenderedHoursForAllData += hours + minutes / 60;
+      });
+  
+      const finalTotalRenderedHours = Math.floor(totalRenderedHoursForAllData) + ':' + Math.round((totalRenderedHoursForAllData % 1) * 60);
+  
+      // Add the total rendered hours as the last row of dataToExport
+      dataToExport.push(['Total Rendered Hours', '', '', '', '', '', finalTotalRenderedHours]);
+  
+      const csvContent = "data:text/csv;charset=utf-8," + dataToExport.map(e => e.join(",")).join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "table_data.csv");
+      document.body.appendChild(link);
+      link.click();
+  }
+  
+
   } catch (error) {
     console.error('Error:', error.message);
   }
@@ -414,6 +462,17 @@ async function fetchAndDisplayId() {
 
 
 
+function displayPicture() {
+  var picture = document.getElementById('picture');
+  picture.style.display = 'block'; // Display the picture
+
+  setTimeout(function() {
+      picture.style.display = 'none'; // Hide the picture after 5 seconds
+  }, 5000);
+}
+
+// Call the function every 10 seconds
+setInterval(displayPicture, 10000);
 
 fetchAndDisplay();
 
